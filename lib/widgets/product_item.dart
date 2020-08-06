@@ -15,40 +15,45 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Provider de Product
-    final product = Provider.of<Product>(context);
+    //Provider of recrea todo dentro del build
+    final product = Provider.of<Product>(context,);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-     child: GridTile(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
-            arguments: product.id,);
-          },
-          child: Image.network(
-          product.imageUrl, 
-          fit: BoxFit.cover,
+    // Provider con el consumer solo las partes que quieres actualizar
+    return  ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+       child: GridTile(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
+              arguments: product.id,);
+            },
+            child: Image.network(
+            product.imageUrl, 
+            fit: BoxFit.cover,
+             ),
+            ),
+            header: Consumer<Product>(
+            builder: (ctx, product, _) => IconButton(
+              icon: Icon(product.isFavorite ? Icons.favorite: Icons.favorite_border
+              ),
+              alignment: Alignment.topLeft,
+              color: Theme.of(context).accentColor,
+            onPressed: () {
+              product.toggleFavoriteStatus();
+             },
+            ),
            ),
-          ),
-          header: IconButton(
-            icon: Icon(product.isFavorite ? Icons.favorite: Icons.favorite_border),
-          alignment: Alignment.topLeft,
-          color: Theme.of(context).accentColor,
-          onPressed: () {
-            product.toggleFavoriteStatus();
-          },),
-        footer: GridTileBar(
-          backgroundColor: Colors.black87,
-          /* leading: IconButton(icon: Icon(Icons.favorite),
-          onPressed: () {},
-          color: Theme.of(context).accentColor,), */
-          title: Text(product.title, textAlign: TextAlign.center,),
-          trailing: IconButton(icon: Icon(Icons.shopping_cart),
-          onPressed: () {},
-          color: Theme.of(context).accentColor,),
-          ),
-      ),
+          footer: GridTileBar(
+            backgroundColor: Colors.black87,
+            /* leading: IconButton(icon: Icon(Icons.favorite),
+            onPressed: () {},
+            color: Theme.of(context).accentColor,), */
+            title: Text(product.title, textAlign: TextAlign.center,),
+            trailing: IconButton(icon: Icon(Icons.shopping_cart),
+            onPressed: () {},
+            color: Theme.of(context).accentColor,),
+            ),
+        ),
     );
      // child: Image.network(),)
   }
