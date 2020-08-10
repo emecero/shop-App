@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../providers/products_provider.dart';
 import '../widgets/products_grid.dart';
+import '../widgets/badge.dart';
+import '../providers/cart.dart';
+import '../screens/cart_screen.dart';
+import '../widgets/app_drawer.dart';
 
 
 enum FilteredOptions {
@@ -27,8 +31,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     return Scaffold(
       
       appBar: AppBar(
+        
         title: Text('Cinco Books'),
         actions: <Widget>[
+          
           PopupMenuButton(
             onSelected: (FilteredOptions selectedValue) {
               setState(() {
@@ -47,8 +53,21 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               PopupMenuItem(child: Text('Show All'), value: FilteredOptions.All,),
             ],
             ),
+          Consumer<Cart>(
+            builder: (_, cart, ch) => Badge(
+            child: ch ,
+              value: cart.itemCount.toString()
+              ),
+              child: IconButton(
+              icon: Icon(Icons.shopping_cart), 
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              }
+              ),
+          ),
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductsGrid(_showOnlyFavorites),
     );
   }
